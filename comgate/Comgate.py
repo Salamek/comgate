@@ -1,5 +1,7 @@
 import requests
+from typing import Optional
 from comgate.http.HttpClient import HttpClient
+from comgate.http.Response import Response
 from comgate.model.Payment import Payment
 from comgate.enum.CountryCodeEnum import CountryCodeEnum
 from comgate.enum.CurrencyCodeEnum import CurrencyCodeEnum
@@ -22,17 +24,17 @@ class Comgate:
         }
         self.http_client = HttpClient(self.session, base_data=base_data, base_url=self.api_gateway)
 
-    def create(self, payment: Payment):
+    def create(self, payment: Payment) -> Response:
         return self.http_client.post('create', payment.to_dict())
 
-    def get_status(self, trans_id: str):
+    def get_status(self, trans_id: str) -> Response:
         return self.http_client.get('status', {'transId': trans_id})
 
     def get_payment_methods(self,
                             lang: LanguageCodeEnum = LanguageCodeEnum.CS,
                             curr: CurrencyCodeEnum = CurrencyCodeEnum.CZK,
                             country: CountryCodeEnum = CountryCodeEnum.CZ
-                            ):
+                            ) -> Response:
 
         if country == CountryCodeEnum.ALL:
             raise Exception('Country must be specified, cannot use ALL')
@@ -45,7 +47,7 @@ class Comgate:
         }
         return self.http_client.get('methods', data)
 
-    def refund(self, trans_id: str, amount: str, curr: CurrencyCodeEnum = CurrencyCodeEnum.CZK, ref_id: str = None):
+    def refund(self, trans_id: str, amount: str, curr: CurrencyCodeEnum = CurrencyCodeEnum.CZK, ref_id: Optional[str] = None) -> Response:
         data = {
             'transId': trans_id,
             'amount': amount,

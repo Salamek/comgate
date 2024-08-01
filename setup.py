@@ -6,7 +6,7 @@ readme = Path('README.md').read_text()
 
 setup(
     name='comgate',
-    version='0.0.2',
+    version='0.0.3',
     packages=find_packages(exclude=['tests', 'tests.*']),
     install_requires=[
         'requests'
